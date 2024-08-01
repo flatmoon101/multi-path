@@ -8,7 +8,27 @@
 </head>
 
 <body>
+
     <div class="box">
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <form id="myForm">
+                    <label for="agents">Number of Agents</label><br>
+                    <input type="number" id="agents" name="agents" min="1" max="5" value="2"><br><br>
+                    <label for="lat">Latitude</label><br>
+                    <input type="number" id="lat" name="lat" step="0.000000000000001"
+                        value="-7.915972873102972"><br><br>
+                    <label for="lon">Longitude</label><br>
+                    <input type="number" id="lon" name="lon" step="0.000000000000001" value="110.56066997979453">
+                    <br>
+                    <br>
+                    <input type="submit" value="Ok" style="margin-left: 80%;">
+                </form>
+            </div>
+        </div>
         <div class="row header">
             <center>
                 <div class="container">
@@ -18,37 +38,8 @@
 
                         </script>
 
-                        <select id="agentSelect">
-                            <!-- <Option id="agent1" class="selectAgent" value="0">Agent 1</Option>
-                            <Option id="agent2" class="selectAgent" value="1">Agent 2</Option>
-                            <Option id="agent3" class="selectAgent" value="2">Agent 3</Option> -->
-                        </select>
+                        <select id="agentSelect"></select>
 
-                        <script>
-                            const agentSelect = document.getElementById('agentSelect');
-                            let agentIndex = 0;
-
-                            agentSelect.addEventListener('change', () => {
-                                agentIndex = agentSelect.selectedIndex;
-                                recenterView(agentIndex)
-                                // console.log('Tes1')
-                                setTimeout(() => {
-                                    recenterArea(agentIndex);
-                                    // console.log('Tes2')
-                                }, 500);
-
-                                function setInputValue() {
-                                    document.getElementById('angle').value = entryAngle[agentIndex];
-                                    document.getElementById('turn').value = firstTurn[agentIndex];
-                                    document.getElementById('separation').value = rowSeparation[agentIndex];
-                                    document.getElementById('altitude').value = altitude[agentIndex];
-                                    // console.log('ok')
-                                }
-
-                                // Panggil fungsi saat halaman dimuat
-                                window.onload = setInputValue();
-                            });
-                        </script>
                     </div>
                     <div id="settings">
                         <table>
@@ -135,11 +126,12 @@
     <script
         src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyCPS20NagOhZRkVhyyNchxO6DkZ3zBq9Fg"></script>
     <script src="DeleteMenu.js"></script>
-    <script>
+    <!-- <script>
         var startLat = -7.915972873102972;
         var startLng = 110.56066997979453;
         var numAgents = 4;
-    </script>
+    </script> -->
+    <script src="script.js"></script>
     <script src="generate.js"></script>
     <script src="coverage.js"></script>
 </body>

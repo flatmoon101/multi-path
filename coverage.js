@@ -15,8 +15,9 @@ var entryAngle = [];
 var firstTurn = [];
 var rowSeparation = [];
 var altitude = [];
+var numAgents = 0;
 
-console.log(pointUpdateTimeout)
+// console.log(pointUpdateTimeout)
 
 function pad(n, width, z) {
     z = z || '0';
@@ -28,6 +29,31 @@ function toggleHelp() {
     $("#help").toggle();
 }
 
+function addAgentSelectEvent() {
+    const agentSelect = document.getElementById('agentSelect');
+    let agentIndex = 0;
+
+    agentSelect.addEventListener('change', () => {
+        agentIndex = agentSelect.selectedIndex;
+        recenterView(agentIndex)
+        // console.log('Tes1')
+        setTimeout(() => {
+            recenterArea(agentIndex);
+            // console.log('Tes2')
+        }, 500);
+
+        function setInputValue() {
+            document.getElementById('angle').value = entryAngle[agentIndex];
+            document.getElementById('turn').value = firstTurn[agentIndex];
+            document.getElementById('separation').value = rowSeparation[agentIndex];
+            document.getElementById('altitude').value = altitude[agentIndex];
+            // console.log('ok')
+        }
+
+        // Panggil fungsi saat halaman dimuat
+        window.onload = setInputValue();
+    });
+}
 function initAgents(numAgents) {
     for (let i = 0; i < numAgents; i++) {
         pointUpdateTimeout.push(null);
@@ -55,50 +81,78 @@ function generateAgents(numAgents) {
     }
 }
 
-function initMap(numAgent) {
-    initAgents(numAgent);
+function initMap() {
+    let startLat;
+    let startLng;
 
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(startLat, startLng),
-        mapTypeId: 'hybrid',
+    const modal = document.getElementById("myModal");
+    modal.style.display = "block";
 
-    });
+    // Get the form
+    const form = document.getElementById("myForm");
 
-    console.log(map)
+    // When the form is submitted, close the modal
+    form.onsubmit = function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        modal.style.display = "none";
 
-    for (let i = 0; i < numAgent; i++) {
-        flightArea.push(new google.maps.Polygon({
-            paths: [
-                { lat: startLat + 0.001 * (i), lng: startLng + 0.001 * (i) },
-                { lat: startLat + 0.001 * (i + 1), lng: startLng + 0.001 * (i) },
-                { lat: startLat + 0.001 * (i + 1), lng: startLng + 0.001 * (i + 1) },
-                { lat: startLat + 0.001 * (i), lng: startLng + 0.001 * (i + 1) }
-            ],
-            strokeColor: '#BB0000',
-            strokeOpacity: 1,
-            strokeWeight: 1,
-            fillColor: '#4444BB',
-            fillOpacity: 0.2,
-            editable: true,
-            draggable: true
-        }));
-        flightArea[i].setMap(map);
-        setPathListeners(i);
-        queuePointsAreaUpdate(i);
-    }
+        numAgents = parseInt(document.getElementById("agents").value);
+        startLat = parseFloat(document.getElementById("lat").value);
+        startLng = parseFloat(document.getElementById("lon").value);
 
-    document.addEventListener("DOMContentLoaded", function () {
+        console.log(typeof (numAgents), typeof (startLat), typeof (startLng));
+        console.log((numAgents), (startLat), (startLng));
+
+        initAgents(numAgents);
+
+        // console.log('tes awal')
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: new google.maps.LatLng(startLat, startLng),
+            mapTypeId: 'hybrid',
+        });
+
+        // console.log(map + 'ini tes')
+
+        for (let i = 0; i < numAgents; i++) {
+            flightArea.push(new google.maps.Polygon({
+                paths: [
+                    { lat: startLat + 0.001 * (i), lng: startLng + 0.001 * (i) },
+                    { lat: startLat + 0.001 * (i + 1), lng: startLng + 0.001 * (i) },
+                    { lat: startLat + 0.001 * (i + 1), lng: startLng + 0.001 * (i + 1) },
+                    { lat: startLat + 0.001 * (i), lng: startLng + 0.001 * (i + 1) }
+                ],
+                strokeColor: '#BB0000',
+                strokeOpacity: 1,
+                strokeWeight: 1,
+                fillColor: '#4444BB',
+                fillOpacity: 0.2,
+                editable: true,
+                draggable: true
+            }));
+            flightArea[i].setMap(map);
+            setPathListeners(i);
+            queuePointsAreaUpdate(i);
+        }
+
+        // document.addEventListener("DOMContentLoaded", function () {
         generateAgents(numAgents); // Change this number to generate more agents
-    });
+        addAgentSelectEvent();
+        // console.log('tes')
+        // });
 
-    deleteMenu = new DeleteMenu();
+        deleteMenu = new DeleteMenu();
 
-    // Define an info window on the map.
-    infoWindow = new google.maps.InfoWindow();
+        // Define an info window on the map.
+        infoWindow = new google.maps.InfoWindow();
 
-    // setPathListeners(0);
-    queuePointsAreaUpdate(0);
-    google.maps.event.trigger(map, 'resize');
+        // setPathListeners(0);
+        queuePointsAreaUpdate(0);
+        google.maps.event.trigger(map, 'resize');
+        recenterView(0);
+    };
+
+    // console.log('Ini tes', numAgents, typeof (numAgents))
 }
 
 function setPathListeners(agent) {
@@ -424,7 +478,7 @@ function changeColor(agent, i) {
 
 // initAgents();
 initColorTable();
-initMap(numAgents);
-recenterView(0);
+initMap();
+// recenterView(0);
 
 
