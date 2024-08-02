@@ -15,7 +15,7 @@ var entryAngle = [];
 var firstTurn = [];
 var rowSeparation = [];
 var altitude = [];
-var numAgents = 0;
+var agentIndex = 0;
 
 // console.log(pointUpdateTimeout)
 
@@ -31,7 +31,7 @@ function toggleHelp() {
 
 function addAgentSelectEvent() {
     const agentSelect = document.getElementById('agentSelect');
-    let agentIndex = 0;
+    // let agentIndex = 0;
 
     agentSelect.addEventListener('change', () => {
         agentIndex = agentSelect.selectedIndex;
@@ -100,8 +100,8 @@ function initMap() {
         startLat = parseFloat(document.getElementById("lat").value);
         startLng = parseFloat(document.getElementById("lon").value);
 
-        console.log(typeof (numAgents), typeof (startLat), typeof (startLng));
-        console.log((numAgents), (startLat), (startLng));
+        // console.log(typeof (numAgents), typeof (startLat), typeof (startLng));
+        // console.log((numAgents), (startLat), (startLng));
 
         initAgents(numAgents);
 
@@ -197,6 +197,7 @@ function updatePointsTextarea(agent) {
 function queueAreaReset(agent) {
     clearTimeout(pointUpdateTimeout);
     clearTimeout(areaResetTimeout);
+    // console.log('tes');
     areaResetTimeout = setTimeout(function () { resetAreaFromInput(agent) }, 500);
 }
 
